@@ -91,8 +91,8 @@ def main():
     for subj in cohort['Subject']:
             mat = np.loadtxt(os.path.join(args.data_dir, folder, args.atlas, subj+suffix))
             mat[np.isnan(mat)] = 0
-            if args.method in ['logcombat', 'logcovbat', 'MATCH_epsilon']:
-                mat = mat + 1e-6
+            #if args.method in ['logcombat', 'logcovbat', 'MATCH_epsilon']:
+            #    mat = mat + 1e-6
             mask = np.loadtxt(os.path.join(args.data_dir, 'normalized_unharmonized', args.atlas, subj+'_normalized_'+args.atlas+'_connmat.txt')) != 0
             mat = mat * mask
             data.append(mat)

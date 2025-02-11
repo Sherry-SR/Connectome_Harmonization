@@ -73,11 +73,11 @@ def match_harmonize_connectomes(cohort, matrices, covars_formula='', sitecol='Si
                 edge_site = y[cohort['Site'] == site]
                 # edges with zero values will remain zero after harmonization, other edges will be adjusted for site effects
                 harmonized_edge = edge_site / np.exp(site_coeff)
-                # put into harmonized data array, substract epsilon for Method 'epsilon' (epsilon=0 otherwise)
-                harmonized[cohort['Site'] == site, i] = harmonized_edge - epsilon
+                # put into harmonized data array, masking out edges that previously have zero values (meaning no connection)
+                harmonized[cohort['Site'] == site, i] = harmonized_edge * (edge_site != 0)
                 site_mult[cohort['Site'] == site, i] = 1.0/np.exp(site_coeff)
-            # put orig data for site0 into data array, substract epsilon for Method 'epsilon' (epsilon=0 otherwise)
-            harmonized[cohort['Site'] == ref_site, i] = y[cohort['Site'] == ref_site] - epsilon
+            # put orig data for site0 into data array
+            harmonized[cohort['Site'] == ref_site, i] = y[cohort['Site'] == ref_site]
         except Exception as e:
             print('exception encountered in edge', i)
             print(str(e))
